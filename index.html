@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI First — AI-копайлот для руководителя</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500&display=swap');
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0a0a0b;
+  --bg-elevated: #111113;
+  --bg-card: #161618;
+  --text: #e8e6e3;
+  --text-muted: #7a7a7d;
+  --text-dim: #4a4a4d;
+  --accent: #c8ff00;
+  --accent-dim: rgba(200, 255, 0, 0.08);
+  --red: #ff3b30;
+  --red-dim: rgba(255, 59, 48, 0.1);
+  --border: rgba(255,255,255,0.06);
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+.space { font-family: 'Space Grotesk', sans-serif; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* === NAV === */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 20px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  backdrop-filter: blur(20px);
+  background: rgba(10,10,11,0.8);
+  border-bottom: 1px solid var(--border);
+}
+
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.logo span { color: var(--accent); }
+
+.nav-cta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 10px 24px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.nav-cta:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* === HERO === */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 120px 32px 80px;
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.hero-eyebrow {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-eyebrow::before {
+  content: '';
+  width: 32px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.hero h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  max-width: 900px;
+  margin-bottom: 32px;
+}
+
+.hero h1 em {
+  font-style: normal;
+  color: var(--accent);
+  position: relative;
+}
+
+.hero-sub {
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  max-width: 520px;
+  line-height: 1.7;
+  margin-bottom: 48px;
+}
+
+.hero-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 18px 40px;
+  background: var(--accent);
+  color: var(--bg);
+  text-decoration: none;
+  transition: all 0.3s;
+  position: relative;
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(200, 255, 0, 0.2);
+}
+
+.hero-cta .arrow {
+  transition: transform 0.3s;
+}
+
+.hero-cta:hover .arrow {
+  transform: translateX(4px);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 48px;
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border);
+}
+
+.hero-stat-value {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.hero-stat-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+  max-width: 140px;
+}
+
+/* Ambient glow */
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 20%;
+  right: -10%;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(200,255,0,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* === SECTION COMMON === */
+section {
+  padding: 120px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+.section-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  margin-bottom: 24px;
+}
+
+/* === PROBLEM === */
+.problem {
+  position: relative;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+  margin-top: 64px;
+}
+
+.problem-left .section-title span {
+  color: var(--red);
+}
+
+.pain-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pain-item {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.pain-item:first-child {
+  border-top: 1px solid var(--border);
+}
+
+.pain-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--red);
+  padding-top: 3px;
+}
+
+.pain-text {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+.pain-text strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.problem-visual {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 32px;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.terminal-bar {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.terminal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--text-dim);
+}
+
+.terminal-dot:first-child { background: var(--red); }
+
+.msg-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.msg-line {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border-left: 2px solid transparent;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  animation: msgFade 0.5s ease-out both;
+}
+
+.msg-line:nth-child(1) { animation-delay: 0.2s; }
+.msg-line:nth-child(2) { animation-delay: 0.4s; }
+.msg-line:nth-child(3) { animation-delay: 0.6s; border-left-color: var(--red); }
+.msg-line:nth-child(4) { animation-delay: 0.8s; }
+.msg-line:nth-child(5) { animation-delay: 1s; border-left-color: var(--red); }
+.msg-line:nth-child(6) { animation-delay: 1.2s; }
+.msg-line:nth-child(7) { animation-delay: 1.4s; border-left-color: var(--red); }
+
+.msg-time {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  flex-shrink: 0;
+}
+
+.msg-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.55rem;
+  padding: 2px 6px;
+  background: var(--red-dim);
+  color: var(--red);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.unread-counter {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--red);
+  margin-top: 16px;
+  text-align: right;
+}
+
+@keyframes msgFade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* === SOLUTION === */
+.solution {
+  position: relative;
+}
+
+.solution .section-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.solution-desc {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  max-width: 600px;
+  line-height: 1.7;
+  margin-bottom: 64px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 40px 32px;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card:hover {
+  border-color: rgba(200,255,0,0.15);
+  background: var(--bg-elevated);
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.feature-card:hover::before {
+  opacity: 0.5;
+}
+
+.feature-icon {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.feature-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+
+.feature-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* === HOW IT WORKS === */
+.how {
+  position: relative;
+}
+
+.how .section-title {
+  margin-bottom: 72px;
+}
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  position: relative;
+}
+
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 28px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), var(--border), transparent);
+}
+
+.step {
+  text-align: center;
+  padding: 0 24px;
+  position: relative;
+}
+
+.step-number {
+  width: 56px;
+  height: 56px;
+  border: 1px solid var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--accent);
+  position: relative;
+  background: var(--bg);
+  z-index: 1;
+}
+
+.step-title {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+
+.step-desc {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* === PRICING === */
+.pricing {
+  position: relative;
+}
+
+.pricing .section-title {
+  margin-bottom: 16px;
+}
+
+.pricing-sub {
+  color: var(--text-muted);
+  margin-bottom: 64px;
+  font-size: 1rem;
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  max-width: 880px;
+}
+
+.price-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: 48px 40px;
+  position: relative;
+  transition: all 0.3s;
+}
+
+.price-card.featured {
+  border-color: var(--accent);
+}
+
+.price-card.featured::after {
+  content: 'Популярный';
+  position: absolute;
+  top: -1px;
+  right: 32px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 6px 16px;
+}
+
+.price-tier {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text-dim);
+  margin-bottom: 20px;
+}
+
+.price-amount {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2.8rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  margin-bottom: 4px;
+}
+
+.price-amount span {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.price-period {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+}
+
+.price-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.price-features li {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.price-features li::before {
+  content: '→';
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+}
+
+.price-cta {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: 1px solid var(--border);
+  color: var(--text);
+  transition: all 0.3s;
+  background: transparent;
+  cursor: pointer;
+}
+
+.price-cta:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.price-card.featured .price-cta {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+.price-card.featured .price-cta:hover {
+  box-shadow: 0 4px 24px rgba(200,255,0,0.2);
+}
+
+.pricing-note {
+  margin-top: 32px;
+  padding: 24px 32px;
+  background: var(--accent-dim);
+  border-left: 2px solid var(--accent);
+  max-width: 880px;
+}
+
+.pricing-note p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.pricing-note strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* === FINAL CTA === */
+.final-cta {
+  text-align: center;
+  padding: 160px 32px;
+  position: relative;
+}
+
+.final-cta .section-title {
+  max-width: 700px;
+  margin: 0 auto 24px;
+}
+
+.final-cta .section-title em {
+  font-style: normal;
+  color: var(--accent);
+}
+
+.final-sub {
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  margin-bottom: 48px;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.final-cta::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(200,255,0,0.03) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+/* === FOOTER === */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-copy {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.footer-contact {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.footer-contact a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+/* === DIVIDERS === */
+.divider {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 1px;
+  background: var(--border);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .problem-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .steps {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+  }
+
+  .steps::before { display: none; }
+
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-stats {
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 600px) {
+  nav { padding: 16px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  section { padding: 80px 20px; }
+
+  .hero h1 { font-size: 2.4rem; }
+
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .step { text-align: left; padding: 0; }
+  .step-number { margin: 0 0 16px; }
+
+  .price-card { padding: 32px 24px; }
+
+  .hero-stats { flex-direction: column; gap: 24px; }
+
+  .final-cta { padding: 100px 20px; }
+
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+
+/* === ANIMATIONS === */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">AI <span>First</span></div>
+  <a href="#contact" class="nav-cta">Обсудить</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">AI-копайлот для руководителя</div>
+  <h1>Вы управляете бизнесом.<br><em>Мы управляем хаосом.</em></h1>
+  <p class="hero-sub">AI-система, которая читает ваши коммуникации, находит скрытые проблемы и каждое утро говорит, что требует внимания прямо сейчас.</p>
+  <a href="#contact" class="hero-cta">
+    Запросить демо <span class="arrow">→</span>
+  </a>
+  <div class="hero-stats">
+    <div>
+      <div class="hero-stat-value">3 часа</div>
+      <div class="hero-stat-label">экономии CEO ежедневно на разборе коммуникаций</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">×2.4</div>
+      <div class="hero-stat-label">быстрее реакция на управленческие сбои</div>
+    </div>
+    <div>
+      <div class="hero-stat-value">14 дней</div>
+      <div class="hero-stat-label">до первых результатов после подключения</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="section-label">01 — Проблема</div>
+  <div class="problem-grid">
+    <div class="problem-left">
+      <h2 class="section-title">Вы последний узнаёте<br>о том, что <span>горит</span></h2>
+      <ul class="pain-list">
+        <li class="pain-item reveal">
+          <span class="pain-number">01</span>
+          <div class="pain-text"><strong>847 непрочитанных сообщений</strong> к утру понедельника. В трёх из них — причина, по которой клиент уйдёт через неделю.</div>
+        </li>
+        <li class="pain-item reveal reveal-delay-1">
+          <span class="pain-number">02</span>
+          <div class="pain-text"><strong>Менеджер обещал клиенту невозможное</strong>, но вы узнаете об этом из претензии, а не из чата.</div>
+        </li>
+        <li class="pain-item reveal reveal-delay-2">
+          <span class="pain-number">03</span>
+          <div class="pain-text"><strong>Конфликт в команде тлеет третью неделю.</strong> Все всё видят. Кроме вас — вам никто не скажет.</div>
+        </li>
+        <li class="pain-item reveal reveal-delay-3">
+          <span class="pain-number">04</span>
+          <div class="pain-text"><strong>Решения принимаются на эмоциях</strong>, потому что нет сводки: что реально происходит, какие тренды, где узкие места.</div>
+        </li>
+      </ul>
+    </div>
+    <div class="problem-visual reveal">
+      <div class="terminal-bar">
+        <div class="terminal-dot"></div>
+        <div class="terminal-dot"></div>
+        <div class="terminal-dot"></div>
+      </div>
+      <div class="msg-stream">
+        <div class="msg-line">
+          <span class="msg-time">08:12</span>
+          Логистика: «Отгрузка задерживается, ждём ответа»
+        </div>
+        <div class="msg-line">
+          <span class="msg-time">08:34</span>
+          Продажи: «Клиент X угрожает уходом»
+        </div>
+        <div class="msg-line">
+          <span class="msg-time">09:01</span>
+          <span class="msg-badge">Пропущено</span>
+          HR: «Два разработчика подали заявление»
+        </div>
+        <div class="msg-line">
+          <span class="msg-time">09:17</span>
+          Финансы: «Перерасход бюджета на 23%»
+        </div>
+        <div class="msg-line">
+          <span class="msg-time">09:45</span>
+          <span class="msg-badge">Пропущено</span>
+          Поддержка: «Массовые жалобы на API»
+        </div>
+        <div class="msg-line">
+          <span class="msg-time">10:02</span>
+          Маркетинг: «Лендинг не конвертит, нужен апрув»
+        </div>
+        <div class="msg-line">
+          <span class="msg-time">10:38</span>
+          <span class="msg-badge">Пропущено</span>
+          Партнёр: «Пересмотрим условия?»
+        </div>
+      </div>
+      <div class="unread-counter">+214 непрочитанных →</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUTION -->
+<section class="solution">
+  <div class="section-label">02 — Решение</div>
+  <h2 class="section-title reveal">AI-копайлот, который<br>видит то, что <em>вы пропускаете</em></h2>
+  <p class="solution-desc reveal">Система подключается к вашим рабочим чатам и каналам. Анализирует тон, контекст, паттерны. Каждое утро — сводка: что критично, что назревает, что делать.</p>
+
+  <div class="features-grid">
+    <div class="feature-card reveal">
+      <div class="feature-icon">// Сводки</div>
+      <div class="feature-title">Утренний брифинг</div>
+      <p class="feature-text">Структурированная сводка по всем каналам. Не простыня текста, а приоритизированные сигналы с контекстом.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-1">
+      <div class="feature-icon">// Сигналы</div>
+      <div class="feature-title">Обнаружение рисков</div>
+      <p class="feature-text">Система видит конфликты, выгорание, срыв дедлайнов и клиентские риски до того, как они станут проблемой.</p>
+    </div>
+    <div class="feature-card reveal reveal-delay-2">
+      <div class="feature-icon">// Действия</div>
+      <div class="feature-title">Рекомендации</div>
+      <p class="feature-text">Не просто «обратите внимание», а конкретные шаги: с кем поговорить, что проверить, какое решение принять.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- HOW IT WORKS -->
+<section class="how">
+  <div class="section-label">03 — Как это работает</div>
+  <h2 class="section-title reveal">От подключения до<br>первой сводки — 48 часов</h2>
+
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-number">01</div>
+      <div class="step-title">Подключение</div>
+      <p class="step-desc">Интегрируем с вашими мессенджерами, почтой и рабочими инструментами. Без доступа к паролям.</p>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-number">02</div>
+      <div class="step-title">Калибровка</div>
+      <p class="step-desc">Система изучает структуру команды, ключевых людей, бизнес-контекст. Учится отличать шум от сигнала.</p>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-number">03</div>
+      <div class="step-title">Сводки</div>
+      <p class="step-desc">Каждое утро — персонализированный брифинг. Критичное выделено. Тренды размечены. Действия предложены.</p>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-number">04</div>
+      <div class="step-title">Эволюция</div>
+      <p class="step-desc">Система учится на вашей обратной связи. Чем дольше работает — тем точнее сигналы и рекомендации.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="section-label">04 — Тарифы</div>
+  <h2 class="section-title reveal">Прозрачные условия,<br>без скрытых платежей</h2>
+  <p class="pricing-sub reveal">Два тарифа. Оба включают полную настройку и поддержку.</p>
+
+  <div class="pricing-grid">
+    <div class="price-card reveal">
+      <div class="price-tier">Стандарт</div>
+      <div class="price-amount">60K <span>₽/мес</span></div>
+      <div class="price-period">без НДС</div>
+      <ul class="price-features">
+        <li>Утренние сводки</li>
+        <li>Обнаружение критичных сигналов</li>
+        <li>До 5 каналов коммуникаций</li>
+        <li>Еженедельный отчёт по трендам</li>
+        <li>Поддержка в рабочие часы</li>
+      </ul>
+      <a href="#contact" class="price-cta">Выбрать</a>
+    </div>
+    <div class="price-card featured reveal reveal-delay-1">
+      <div class="price-tier">Про</div>
+      <div class="price-amount">120K <span>₽/мес</span></div>
+      <div class="price-period">без НДС</div>
+      <ul class="price-features">
+        <li>Всё из Стандарта</li>
+        <li>Неограниченные каналы</li>
+        <li>Рекомендации к действию</li>
+        <li>Анализ тональности и выгорания</li>
+        <li>Приоритетная поддержка 24/7</li>
+        <li>Персональная калибровка AI</li>
+      </ul>
+      <a href="#contact" class="price-cta">Выбрать</a>
+    </div>
+  </div>
+
+  <div class="pricing-note reveal">
+    <p><strong>Интеграция и настройка — от 100 000 ₽</strong> единоразово. Включает подключение каналов, калибровку системы, обучение на вашем контексте и первый месяц сопровождения.</p>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="contact">
+  <h2 class="section-title reveal">Хватит читать чаты.<br><em>Начните управлять.</em></h2>
+  <p class="final-sub reveal">Запишитесь на 30-минутное демо. Покажем систему на ваших реальных данных.</p>
+  <a href="https://t.me/ai_first_bot" class="hero-cta reveal reveal-delay-1" target="_blank">
+    Написать в Telegram <span class="arrow">→</span>
+  </a>
+</section>
+
+<footer>
+  <div class="footer-copy">© 2026 AI First. Все права защищены.</div>
+  <div class="footer-contact">
+    <a href="https://t.me/ai_first_bot">t.me/ai_first_bot</a>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+reveals.forEach(el => observer.observe(el));
+
+// Smooth scroll for anchors
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
