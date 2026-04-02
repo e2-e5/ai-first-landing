@@ -69,24 +69,56 @@ nav .cta-sm:hover{background:var(--lime);color:var(--bg)}
 .hero-cta:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,255,46,.25)}
 .hero-cta::after{content:'→';transition:transform .2s}.hero-cta:hover::after{transform:translateX(4px)}
 
-/* Hero visual — agent constellation */
-.hero-visual{position:relative;height:420px}
-@media(max-width:900px){.hero-visual{height:320px;margin-top:20px}}
-.agent-node{position:absolute;display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--bg-elevated);border:1px solid var(--border);border-radius:8px;font-family:var(--font-mono);font-size:.78rem;color:var(--text-dim);transition:all .4s;cursor:default;white-space:nowrap}
-.agent-node:hover{border-color:var(--lime);color:var(--lime);transform:scale(1.05)}
-.agent-node .icon{font-size:1.1rem}
-.agent-node.orchestrator{background:rgba(200,255,46,.08);border-color:rgba(200,255,46,.3);color:var(--lime);font-weight:600;z-index:2}
+/* Hero visual — orbital system */
+.hero-visual{position:relative;height:420px;display:flex;align-items:center;justify-content:center}
+@media(max-width:900px){.hero-visual{height:340px;margin-top:20px}}
 
-/* Positions */
-.an-1{top:15%;left:5%}.an-2{top:5%;left:55%}.an-3{top:40%;right:5%}
-.an-4{bottom:25%;left:0}.an-5{bottom:10%;left:40%}.an-core{top:50%;left:50%;transform:translate(-50%,-50%)}
+.orbit-system{position:relative;width:360px;height:360px;animation:orbit-spin 60s linear infinite}
+@keyframes orbit-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(max-width:900px){.orbit-system{width:280px;height:280px}}
+@media(max-width:400px){.orbit-system{width:240px;height:240px}}
+
+/* Center — Orchestrator */
+.orbit-core{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;border-radius:50%;background:rgba(200,255,46,.1);border:2px solid var(--lime);display:flex;align-items:center;justify-content:center;font-size:2rem;z-index:10;animation:orbit-spin 60s linear infinite reverse, core-pulse 3s ease-in-out infinite;cursor:default}
+@keyframes core-pulse{0%,100%{box-shadow:0 0 20px rgba(200,255,46,.2),0 0 60px rgba(200,255,46,.06)}50%{box-shadow:0 0 35px rgba(200,255,46,.35),0 0 80px rgba(200,255,46,.1)}}
+.orbit-core-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:var(--font-mono);font-size:.65rem;color:var(--lime);white-space:nowrap;pointer-events:none;animation:orbit-spin 60s linear infinite reverse;z-index:11;margin-top:52px;font-weight:600;letter-spacing:.03em}
+@media(max-width:900px){.orbit-core{width:64px;height:64px;font-size:1.6rem}.orbit-core-label{margin-top:44px;font-size:.6rem}}
+
+/* Orbit ring */
+.orbit-ring{position:absolute;top:0;left:0;width:100%;height:100%;border-radius:50%;border:1px solid rgba(200,255,46,.1)}
+.orbit-ring-2{position:absolute;top:15%;left:15%;width:70%;height:70%;border-radius:50%;border:1px dashed rgba(200,255,46,.06)}
+
+/* Connection lines — SVG */
+.orbit-lines{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:5}
+.orbit-line{stroke:rgba(200,255,46,.15);stroke-width:1;stroke-dasharray:4 6;fill:none;animation:dash-flow 2s linear infinite}
+@keyframes dash-flow{to{stroke-dashoffset:-20}}
+
+/* Running dots on lines */
+.orbit-dot{fill:var(--lime);opacity:.6;r:2}
+.orbit-dot-anim{animation:dot-run 3s linear infinite}
+@keyframes dot-run{0%{opacity:0}10%{opacity:.8}90%{opacity:.8}100%{opacity:0}}
+
+/* Agent nodes on orbit */
+.orbit-agent{position:absolute;width:48px;height:48px;border-radius:50%;background:var(--bg-elevated);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:1.3rem;cursor:default;transition:border-color .3s,box-shadow .3s;z-index:8;animation:orbit-spin 60s linear infinite reverse}
+.orbit-agent:hover{border-color:var(--lime);box-shadow:0 0 20px rgba(200,255,46,.2)}
+.orbit-agent .orbit-tooltip{position:absolute;bottom:-28px;left:50%;transform:translateX(-50%);font-family:var(--font-mono);font-size:.6rem;color:var(--lime);white-space:nowrap;opacity:0;transition:opacity .3s;pointer-events:none;background:var(--bg);padding:2px 8px;border-radius:4px;border:1px solid rgba(200,255,46,.2)}
+.orbit-agent:hover .orbit-tooltip{opacity:1}
+@media(max-width:900px){.orbit-agent{width:40px;height:40px;font-size:1.1rem}.orbit-agent .orbit-tooltip{font-size:.55rem;bottom:-24px}}
+
+/* Agent positions on circle (evenly spaced, 72° apart) */
+.orbit-pos-0{top:-24px;left:50%;transform:translateX(-50%)}
+.orbit-pos-1{top:14%;right:-24px;transform:none}
+.orbit-pos-2{bottom:14%;right:-24px;transform:none}
+.orbit-pos-3{bottom:-24px;left:50%;transform:translateX(-50%)}
+.orbit-pos-4{bottom:14%;left:-24px;transform:none}
 @media(max-width:900px){
-.an-1{top:5%;left:2%}.an-2{top:0;right:2%;left:auto}.an-3{top:35%;right:0}
-.an-4{bottom:30%;left:0}.an-5{bottom:5%;left:20%}.an-core{top:50%;left:50%}
-.agent-node{padding:8px 12px;font-size:.7rem}
+.orbit-pos-0{top:-20px}.orbit-pos-1{top:14%;right:-20px}.orbit-pos-2{bottom:14%;right:-20px}
+.orbit-pos-3{bottom:-20px}.orbit-pos-4{bottom:14%;left:-20px}
 }
-/* Lines drawn by JS canvas */
-#constellation-canvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+
+/* Ambient particles */
+.orbit-particle{position:absolute;width:2px;height:2px;background:var(--lime);border-radius:50%;opacity:0;animation:particle-float 4s ease-in-out infinite}
+@keyframes particle-float{0%{opacity:0;transform:scale(0)}30%{opacity:.4}70%{opacity:.3}100%{opacity:0;transform:scale(1.5)}}
 
 /* ── PROBLEM ── */
 #problem{background:var(--bg)}
@@ -269,13 +301,43 @@ AI&#8209;команда, которая<br>управляет бизнесом <
 </button>
 </div>
 <div class="hero-visual reveal reveal-delay-2">
-<canvas id="constellation-canvas"></canvas>
-<div class="agent-node an-1"><span class="icon">🎯</span> Контролёр</div>
-<div class="agent-node an-2"><span class="icon">📊</span> Аналитик</div>
-<div class="agent-node an-3"><span class="icon">💬</span> Коммуникатор</div>
-<div class="agent-node an-4"><span class="icon">👥</span> HR</div>
-<div class="agent-node an-5"><span class="icon">💰</span> Финансист</div>
-<div class="agent-node orchestrator an-core"><span class="icon">🧠</span> Оркестратор</div>
+<div class="orbit-system">
+<!-- Orbit rings -->
+<div class="orbit-ring"></div>
+<div class="orbit-ring-2"></div>
+
+<!-- Connection lines SVG -->
+<svg class="orbit-lines" viewBox="0 0 360 360">
+<!-- Lines from center to each agent position -->
+<line class="orbit-line" x1="180" y1="180" x2="180" y2="0" style="animation-delay:0s"/>
+<line class="orbit-line" x1="180" y1="180" x2="351" y2="124" style="animation-delay:.4s"/>
+<line class="orbit-line" x1="180" y1="180" x2="286" y2="326" style="animation-delay:.8s"/>
+<line class="orbit-line" x1="180" y1="180" x2="74" y2="326" style="animation-delay:1.2s"/>
+<line class="orbit-line" x1="180" y1="180" x2="9" y2="124" style="animation-delay:1.6s"/>
+<!-- Running dots -->
+<circle class="orbit-dot" cx="180" cy="90" style="animation:dot-run 2.5s linear infinite 0s"><animateMotion dur="2.5s" repeatCount="indefinite" path="M180,180 L180,0" keyTimes="0;1" calcMode="linear"/></circle>
+<circle class="orbit-dot" cx="0" cy="0" style="animation:dot-run 2.5s linear infinite .5s"><animateMotion dur="2.5s" repeatCount="indefinite" path="M180,180 L351,124"/></circle>
+<circle class="orbit-dot" cx="0" cy="0" style="animation:dot-run 2.5s linear infinite 1s"><animateMotion dur="2.5s" repeatCount="indefinite" path="M180,180 L286,326"/></circle>
+<circle class="orbit-dot" cx="0" cy="0" style="animation:dot-run 2.5s linear infinite 1.5s"><animateMotion dur="2.5s" repeatCount="indefinite" path="M180,180 L74,326"/></circle>
+<circle class="orbit-dot" cx="0" cy="0" style="animation:dot-run 2.5s linear infinite 2s"><animateMotion dur="2.5s" repeatCount="indefinite" path="M180,180 L9,124"/></circle>
+</svg>
+
+<!-- Center: Orchestrator -->
+<div class="orbit-core">🧠</div>
+<div class="orbit-core-label">Оркестратор</div>
+
+<!-- Orbiting agents (5 positions evenly on circle) -->
+<div class="orbit-agent orbit-pos-0">🎯<span class="orbit-tooltip">Контролёр</span></div>
+<div class="orbit-agent orbit-pos-1">📊<span class="orbit-tooltip">Аналитик</span></div>
+<div class="orbit-agent orbit-pos-2">💬<span class="orbit-tooltip">Коммуникатор</span></div>
+<div class="orbit-agent orbit-pos-3">👥<span class="orbit-tooltip">HR</span></div>
+<div class="orbit-agent orbit-pos-4">💰<span class="orbit-tooltip">Финансист</span></div>
+
+<!-- Ambient particles -->
+<div class="orbit-particle" style="top:20%;left:10%;animation-delay:0s"></div>
+<div class="orbit-particle" style="top:70%;right:15%;animation-delay:1.5s"></div>
+<div class="orbit-particle" style="bottom:20%;left:30%;animation-delay:3s"></div>
+</div>
 </div>
 </div>
 </div>
@@ -652,14 +714,14 @@ AI&#8209;команда, которая<br>управляет бизнесом <
 
 <div class="price-card reveal reveal-delay-3">
 <div class="price-name">Интеграция</div>
-<div class="price-amount">100 000 <span class="currency">₽</span></div>
-<div class="price-period">разовая настройка</div>
+<div class="price-amount" style="font-size:1.6rem">индивидуально</div>
+<div class="price-period">зависит от компании и процессов</div>
 <ul class="price-features">
 <li>Подключение всех источников</li>
 <li>Настройка агентов</li>
 <li>Обучение команды</li>
 <li>Кастомные коннекторы</li>
-<li>Запуск за 2–4 недели</li>
+<li>Сроки зависят от масштаба</li>
 </ul>
 <button class="price-cta" onclick="document.getElementById('final-cta').scrollIntoView({behavior:'smooth'})">Обсудить</button>
 </div>
@@ -720,52 +782,7 @@ cio.unobserve(el);
 },{threshold:0.5});
 counters.forEach(el=>cio.observe(el));
 
-// ── CONSTELLATION LINES ──
-function drawConstellation(){
-const canvas=document.getElementById('constellation-canvas');
-if(!canvas)return;
-const visual=canvas.parentElement;
-const rect=visual.getBoundingClientRect();
-canvas.width=rect.width;canvas.height=rect.height;
-const ctx=canvas.getContext('2d');
-ctx.clearRect(0,0,canvas.width,canvas.height);
-
-const core=visual.querySelector('.an-core');
-if(!core)return;
-const nodes=visual.querySelectorAll('.agent-node:not(.orchestrator)');
-const coreRect=core.getBoundingClientRect();
-const cx=coreRect.left-rect.left+coreRect.width/2;
-const cy=coreRect.top-rect.top+coreRect.height/2;
-
-ctx.strokeStyle='rgba(200,255,46,0.12)';
-ctx.lineWidth=1;
-ctx.setLineDash([4,6]);
-
-nodes.forEach(node=>{
-const nr=node.getBoundingClientRect();
-const nx=nr.left-rect.left+nr.width/2;
-const ny=nr.top-rect.top+nr.height/2;
-ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(nx,ny);ctx.stroke();
-
-// Small dot at node end
-ctx.fillStyle='rgba(200,255,46,0.3)';
-ctx.beginPath();ctx.arc(nx,ny,3,0,Math.PI*2);ctx.fill();
-});
-
-// Glow at center
-const grd=ctx.createRadialGradient(cx,cy,0,cx,cy,60);
-grd.addColorStop(0,'rgba(200,255,46,0.08)');
-grd.addColorStop(1,'transparent');
-ctx.fillStyle=grd;
-ctx.beginPath();ctx.arc(cx,cy,60,0,Math.PI*2);ctx.fill();
-}
-
-// Debounced resize
-let resizeTimer;
-window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(drawConstellation,150)});
-// Initial draw after layout
-setTimeout(drawConstellation,300);
-setTimeout(drawConstellation,1000);
+// ── ORBIT (pure CSS, no JS needed) ──
 
 // Open first scenario by default
 document.querySelector('.scenario-card')?.classList.add('open');
